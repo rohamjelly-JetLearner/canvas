@@ -25,6 +25,18 @@ def brush_draw():
 
 def pen_draw():
     activate_button(pen)
+def draw_line(event):
+    global oldx,oldy
+    scalew=scale.get()
+    if eraser_on:
+        colour='white'
+        scalew+=3
+    else:
+        colour=color
+    if oldx and oldy:
+        canvas.create_line(oldx,oldy,event.x,event.y,width=scalew,fill=colour,capstyle=ROUND,smooth=True,splinesteps=30)
+    oldx=event.x
+    oldy=event.y
 
 eraser_on=False
 color='black'
@@ -36,10 +48,10 @@ colour=Button(root,text='COLOUR',command=colour_change)
 colour.grid(column=2,row=0)
 eraser=Button(root,text='ERASER',command=eraser_active)
 eraser.grid(column=3,row=0)
-pen=Scale(root,from_=1 ,to=10,orient=HORIZONTAL)
-pen.grid(column=4,row=0)
+scale=Scale(root,from_=1 ,to=10,orient=HORIZONTAL)
+scale.grid(column=4,row=0)
 canvas=Canvas(root,bg='white')
 canvas.grid(columnspan=5,row=1)
 active_button=pen
-
+canvas.bind('<B1-Motion>',draw_line)
 root.mainloop()
